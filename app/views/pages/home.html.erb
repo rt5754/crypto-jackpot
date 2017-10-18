@@ -1,5 +1,5 @@
 
-  <%= render 'jackpot' %>
+  <%= render 'jackpot' if @jackpot %>
   
   <%= link_to "Place Bet (0.1 ether)", update_pot_path(@jackpot, :amount => 0.1), method: :post,:remote => true, id: "bet-btn", class: "btn btn-info btn-lg" %>
 
