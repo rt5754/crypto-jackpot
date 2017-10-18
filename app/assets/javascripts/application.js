@@ -30,7 +30,7 @@ $(document).ready(function() {
   setInterval(function() {
         $.ajax({
             type: "POST",
-            url: "/jackpot/update/21",
+            url: "/jackpot/update/1",
             datatype: "json",
             success: function(data) {
               console.log("pot: " + data.pot);
