@@ -1,0 +1,23 @@
+<div class="center live-jackpot">
+  <h1>Jackpot # <%= @jackpot.id %></h1>
+  
+  <div id="jackpot-doughnut" class="donut-size">
+  <div class="pie-wrapper">
+    <span class="label">
+        <span class="ether-logo"><img src="images/ether.png"></span>
+    </span>
+    <div class="pie">
+      <div class="left-side half-circle"></div>
+      <div class="right-side half-circle"></div>
+    </div>
+    <div class="shadow"></div>
+  </div>
+  <div>
+    <h2 id="potSize"></h2>
+  </div>
+</div>
+</div>
+
+  <%= content_tag :div, class: "pot_info", data: {pot: @jackpot.pot, potID: @jackpot.id} do %>
+  <% end %>
+  

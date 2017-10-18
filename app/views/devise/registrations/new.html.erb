@@ -18,6 +18,15 @@
       <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation, class: 'form-control' %>
     </div>
+    <div class="form-group">
+      <%= f.label "Ether wallet address" %>
+      <%= f.text_field :wallet_address, class: 'form-control', placeholder: "0xFb57AaD7f4D469b6b26f1A134d96d19b4A9EACec" %>
+    </div>
+    <div class="alert alert-warning">
+      <strong>Please note:</strong><br>
+      <p>Enter your correct wallet address. 
+      This address will be used to send you ether. Entering the wrong address will result in a loss of funds</p>
+    </div>
      <%= f.submit 'Sign up', :class => 'button right' %>
   <% end %>
 </div>

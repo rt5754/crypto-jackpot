@@ -1,52 +1,25 @@
-// This is a manifest file that'll be compiled into application.js, which will include all the files
-// listed below.
-//
-// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
-// or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
-//
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// compiled file.
-//
-// Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
-// about supported directives.
-//
+/**
+ * Updates the donut chart's percent number and the CSS positioning of the progress bar.
+ * Also allows you to set if it is a donut or pie chart
+ * @param  {string}  el      The selector for the donut to update. '#thing'
+ * @param  {number}  percent Passing in 22.3 will make the chart show 22%
+ * @param  {boolean} donut   True shows donut, false shows pie
+ */
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .
 
-
-/* global $, pot, gon */
+/* global $ */
 
 $(document).ready(function() {
   
   $('#test-btn').click(function () {
-      updateDonutChart('#specificChart', pot, true);    
+      updateDonutChart('#specificChart', 100, true);    
   });
-  
-  var currentUrl = window.location.href;
 
-  setInterval(function() {
-        $.ajax({
-            type: "POST",
-            url: "/jackpot/update/21",
-            datatype: "json",
-            success: function(data) {
-              console.log("pot: " + data.pot);
-              updatePot(data.pot);
-            },
-            error: function() {
-              console.log("FUCKsake")
-            }
-        });
-    }, 3000);
-});
-
-function updatePot(pot) {
-  $('#potSize').html("Ξ " + pot)
-  updateDonutChart('#jackpot-doughnut', pot * 100 , true); 
-}
+})
 
 function updateDonutChart (el, percent, donut) {
     percent = Math.round(percent);
@@ -99,7 +72,4 @@ $('#donut input').change(function () {
     }
     updateDonutChart('#specificChart', percent, donut);
 });
-
-
-
 
