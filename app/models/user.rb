@@ -3,5 +3,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  validates :wallet_address, presence: true, length: {is: 42};
+  validates :wallet_address, presence: true, uniqueness: true, length: {is: 42};
+
 end

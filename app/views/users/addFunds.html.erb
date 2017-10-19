@@ -1,4 +1,4 @@
 <div class="center">
-  <%=  update_balance(1) %>
   <h1><%= "My balance: #{current_user.balance.round(8)}" %></h1>
+  <%= link_to "Add 1 ether", update_funds_path(current_user, :amount => 1), method: :post, :remote => true %>
 </div>

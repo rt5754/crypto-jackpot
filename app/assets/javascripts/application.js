@@ -26,25 +26,47 @@ $(document).ready(function() {
   });
   
   var currentUrl = window.location.href;
-
+  var potID = 0;
+  
+  getPotID()
+  setInterval(getPotID(),10000);
+  
+  
   setInterval(function() {
-        $.ajax({
-            type: "POST",
-            url: "/jackpot/update/1",
-            datatype: "json",
-            success: function(data) {
-              console.log("pot: " + data.pot);
-              updatePot(data.pot);
-            },
-            error: function() {
-              console.log("FUCKsake")
-            }
-        });
-    }, 3000);
+    $.ajax({
+        type: "POST",
+        url: "/jackpot/update/" + potID,
+        datatype: "json",
+        success: function(data) {
+          console.log("pot: " + data.pot);
+          updatePot(data.pot);
+          updateUserBalance(data.user_balance);
+        },
+        error: function() {
+          console.log("FUCKsake")
+        }
+    });
+}, 3000);
+
+function getPotID() {
+  $.ajax({
+      type: "GET",
+      url: "",
+      datatype: "json",
+      success: function(data) {
+        console.log("FACK YES");
+        potID = data.potID;
+      }
+    });
+}
 });
 
+function updateUserBalance(balance) {
+  $('.user-balance').html("Ξ " + balance);
+}
+
 function updatePot(pot) {
-  $('#potSize').html("Ξ " + pot)
+  $('#potSize').html("Ξ " + Number(pot).toFixed(8))
   updateDonutChart('#jackpot-doughnut', pot * 100 , true); 
 }
 

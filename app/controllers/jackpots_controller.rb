@@ -16,11 +16,18 @@ class JackpotsController < ApplicationController
   
   def update
     @jackpot = Jackpot.find(params[:id])
+    @user = User.find(5)
     if params.has_key?(:amount)
-      @jackpot.update(pot: @jackpot.pot + params[:amount].to_f)
+      @jackpot.update(pot: @jackpot.pot + BigDecimal(params[:amount]))
+      current_user.update(balance: current_user.balance - BigDecimal(params[:amount]))
+    end
+    if @user
+      balance = @user.balance.to_s
+    else
+      balance = "0"
     end
     respond_to do |format| 
-      format.json { render json: { pot: @jackpot.pot } }
+      format.json { render json: { pot: @jackpot.pot, user_balance: balance } }
       format.js
     end
   end

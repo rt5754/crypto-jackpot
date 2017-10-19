@@ -1,6 +1,6 @@
 <% if user_signed_in? %>
-  <li><%= link_to raw("Balance " "<span class=\"badge\">".html_safe + current_user.balance.to_s + " ether</span>".html_safe), 
-          addFunds_path(current_user), 
+  <li><%= link_to raw("Balance " "<span class=\"badge user-balance\">".html_safe + current_user.balance.to_s + " ether</span>".html_safe), 
+          addFunds_path(current_user, :amount => 0.08592), 
           class: "btn btn-success btn-balance" %></li>
   <li><%= link_to 'Edit account', edit_user_registration_path %></li>
   <li><%= link_to 'Sign out', destroy_user_session_path, :method=>'delete' %></li>

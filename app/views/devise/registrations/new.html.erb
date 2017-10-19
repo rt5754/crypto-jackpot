@@ -27,6 +27,7 @@
       <p>Enter your correct wallet address. 
       This address will be used to send you ether. Entering the wrong address will result in a loss of funds</p>
     </div>
+       <% hidden_field_tag :balance, value: 0.0 %> 
      <%= f.submit 'Sign up', :class => 'button right' %>
   <% end %>
 </div>
