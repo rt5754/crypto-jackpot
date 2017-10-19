@@ -6,4 +6,5 @@ class User < ApplicationRecord
   validates :wallet_address, presence: true, uniqueness: true, length: {is: 42};
   has_many :games
   has_many :jackpots, :through => :games
+  cattr_accessor :current_user
 end

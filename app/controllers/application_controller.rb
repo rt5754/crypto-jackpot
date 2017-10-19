@@ -8,5 +8,11 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :wallet_address, :balance])
     devise_parameter_sanitizer.permit(:account_update, keys: [:name, :wallet_address, :jackpot_id, :balance])
   end
+  
+  before_filter :set_current_user
+
+  def set_current_user
+    User.current_user = current_user
+  end
 
 end

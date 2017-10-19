@@ -16,7 +16,7 @@ class JackpotsController < ApplicationController
   
   def update
     @jackpot = Jackpot.find(params[:id])
-    @user = User.find(params[:user_id])
+    @user = User.find(User.current_user.id)
     if params.has_key?(:amount)
       if @jackpot.users.include? @user
         flash[:danger] = "You have already gone in on this pot"
