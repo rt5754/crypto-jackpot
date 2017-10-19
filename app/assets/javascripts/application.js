@@ -52,7 +52,7 @@ function getPotID() {
   $.ajax({
       type: "GET",
       url: "",
-      datatype: "json",
+      datatype: "script",
       success: function(data) {
         console.log("FACK YES");
         potID = data.potID;

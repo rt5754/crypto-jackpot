@@ -1,4 +1,5 @@
 <div class="center live-jackpot">
+  <%= render 'shared/messages' %>
   <h1>Jackpot # <%= @jackpot.id %></h1>
   
   <div id="jackpot-doughnut" class="donut-size">
@@ -16,8 +17,26 @@
     <h2 id="potSize"></h2>
   </div>
 </div>
-</div>
 
-  <%= content_tag :div, class: "pot_info", data: {pot: @jackpot.pot, potID: @jackpot.id} do %>
-  <% end %>
-  
+<% if @jackpot.users.any? %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <th>User</th>
+        <th>Stake</th>
+        <th>Win chance</th>
+      </thead>
+      <tbody>
+        <% @jackpot.users.each do |user| %>
+          <tr>
+            <td><%= link_to user.name, user_path(user) %></td>
+            <td><%= user.balance %></td>
+            <td><%= 234 %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+</div>
