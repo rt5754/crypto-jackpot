@@ -1,5 +1,17 @@
 <%= render 'jackpot' if @jackpot %>
-<% if current_user %>
+<% if User.current_user %>
   <%= link_to "Place Bet (0.1 ether)", update_pot_path(@jackpot, :amount => 0.1, :user_id => current_user.id), 
   method: :post,:remote => true, id: "bet-btn", class: "btn btn-info btn-lg" %>
+  
+  <%= form_for(@jackpot, :url => update_pot_path(@jackpot, :user_id => current_user.id), :html => {:remote => true, method: :post}) do |f |%>
+    <div class="input-group col-md-6 col-md-offset-3">
+      <span class="input-group-addon">Ξ</span>
+      <%= f.text_field :amount, class: "form-control", placeholder: "ether" %>
+      <span class="input-group-btn">
+        <%= f.submit "Place bet",type: "button", class: "btn btn-default", placeholder: "ether" %>
+      </span>
+    </div>
+
+  <% end %>
 <% end %>
+

@@ -39,7 +39,7 @@ $(document).ready(function() {
         datatype: "json",
         success: function(data) {
           console.log("pot: " + data.pot);
-          updatePot(data.pot);
+          updatePot(data.pot, data.time);
           updateUserBalance(data.user_balance);
         },
         error: function() {
@@ -65,7 +65,8 @@ function updateUserBalance(balance) {
   $('.user-balance').html("Ξ " + balance);
 }
 
-function updatePot(pot) {
+function updatePot(pot, time) {
+  $('#timeLeft').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether") 
   $('#potSize').html("Ξ " + Number(pot).toFixed(8))
   updateDonutChart('#jackpot-doughnut', pot * 100 , true); 
 }
