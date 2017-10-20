@@ -26,8 +26,7 @@ class JackpotsController < ApplicationController
           @jackpot.update(pot: @jackpot.pot + BigDecimal(params[:amount]))
           current_user.update(balance: User.current_user.balance - BigDecimal(params[:amount]))
           @game = Game.where(user_id: @user.id, jackpot_id: @jackpot.id)
-          @game.user_stake = BigDecimal(params[:amount])
-          @game.save
+          @game.update(user_stake: BigDecimal(params[:amount]))
         end
       end
     end
@@ -51,7 +50,7 @@ class JackpotsController < ApplicationController
     @game = Game.where(jackpot_id: @jackpot.id).first
     @game2 = Game.where(jackpot_id: @jackpot.id).second
     if @game && @game2
-      return (60 * 5) - (Time.now - @game.created_at).round(0)
+      return (60 * 5) - (Time.now - @game2.created_at).round(0)
     else
       return "300"
     end

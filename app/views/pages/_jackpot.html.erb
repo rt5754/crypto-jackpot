@@ -33,7 +33,8 @@
         <% @jackpot.users.each do |user| %>
           <tr>
             <td><%= link_to user.name, user_path(user) %></td>
-            <td><%= user.balance %></td>
+            <% @game = Game.where(jackpot_id: @jackpot.id, user_id: user.id).first %>
+            <td><%= @game.user_stake.to_s %></td>
             <td><%= 234 %></td>
           </tr>
         <% end %>

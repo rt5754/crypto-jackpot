@@ -31,6 +31,22 @@ $(document).ready(function() {
   getPotID()
   setInterval(getPotID(),10000);
   
+  var timeLeft = 300
+  
+  setInterval(function() {
+      updateTimer(timeLeft);
+    if (timeLeft != 300) {
+      timeLeft -= 1
+    }      
+  }, 1000);
+  
+  function updateTimer(time) {
+    if (time != "300") {
+      $('#timeLeft').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether") 
+    } else {
+      $('#timeLeft').html("Countdown will start when at least 2 players have entered the pot")  
+    }  
+  }
   
   setInterval(function() {
     $.ajax({
@@ -39,8 +55,9 @@ $(document).ready(function() {
         datatype: "json",
         success: function(data) {
           console.log("pot: " + data.pot);
-          updatePot(data.pot, data.time);
+          updatePot(data.pot);
           updateUserBalance(data.user_balance);
+          timeLeft = data.time;
         },
         error: function() {
           console.log("FUCKsake")
@@ -66,7 +83,6 @@ function updateUserBalance(balance) {
 }
 
 function updatePot(pot, time) {
-  $('#timeLeft').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether") 
   $('#potSize').html("Ξ " + Number(pot).toFixed(8))
   updateDonutChart('#jackpot-doughnut', pot * 100 , true); 
 }
