@@ -1,6 +1,12 @@
-<div class="center live-jackpot">
+<div class="center">
   <%= render 'shared/messages' %>
-  <h1>Jackpot # <%= @jackpot.id %></h1>
+  <h1>Jackpot #<%= @jackpot.id %>
+    <% if @jackpot.open == true %>
+      <span class="label label-success">Open</span>
+    <% else %>
+      <span class="label label-danger">Closed</span>
+    <% end %>
+  </h1>
   
   <div id="jackpot-doughnut" class="donut-size">
   <div class="pie-wrapper">
@@ -14,16 +20,16 @@
     <div class="shadow"></div>
   </div>
   <div>
-    <h2 id="potSize"></h2>
+    <h2>Ξ<%= @jackpot.pot %></h2>
   </div>
   <div>
-    <h5 id="timeLeft"></h5>
+    <h5><%=  %></h5>
   </div>
 </div>
 
 <% if @jackpot.users.any? %>
   <div class="table-responsive">
-    <table class="table">
+    <table class="table table-bordered">
       <thead>
         <th>User</th>
         <th>Stake</th>
@@ -34,8 +40,8 @@
           <tr>
             <td><%= link_to user.name, user_path(user) %></td>
             <% @game = Game.where(jackpot_id: @jackpot.id, user_id: user.id).first %>
-            <td><%= @game.user_stake.to_s %></td>
-            <td><%= 234 %></td>
+            <td><%= @game.user_stake.to_s %> ether</td>
+            <td><%= ((@game.user_stake / @jackpot.pot) * 100).round(2) %>%</td>
           </tr>
         <% end %>
       </tbody>

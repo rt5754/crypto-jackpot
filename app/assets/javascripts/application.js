@@ -17,7 +17,7 @@
 //= require_tree .
 
 
-/* global $, pot, gon */
+/* global $, pot, jQuery */
 
 $(document).ready(function() {
   
@@ -25,53 +25,41 @@ $(document).ready(function() {
       updateDonutChart('#specificChart', pot, true);    
   });
   
-  var currentUrl = window.location.href;
-  var potID = 0;
-  
-  getPotID()
-  setInterval(getPotID(),10000);
-  
-  var timeLeft = 300
-  
-  setInterval(function() {
-      updateTimer(timeLeft);
-    if (timeLeft != 300) {
-      timeLeft -= 1
-    }      
-  }, 1000);
-  
-  function updateTimer(time) {
+/*  function updateTimer(time) {
     if (time != "300") {
       $('#timeLeft').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether") 
     } else {
       $('#timeLeft').html("Countdown will start when at least 2 players have entered the pot")  
     }  
-  }
+    if (time < 0) {
+      $('#timeLeft').html("Drawing winner...")    
+    }
+  } */
+  var potID = 0
+  
+  getPotID()
   
   setInterval(function() {
+    getPotID()
     $.ajax({
         type: "POST",
         url: "/jackpot/update/" + potID,
-        datatype: "json",
-        success: function(data) {
-          console.log("pot: " + data.pot);
-          updatePot(data.pot);
-          updateUserBalance(data.user_balance);
-          timeLeft = data.time;
+        complete: function(response) {
+          $('.live-jackpot').html(response.responseText);
         },
-        error: function() {
-          console.log("FUCKsake")
+        error: function(xhr, status,error) {
+          console.log("Error");
         }
     });
 }, 3000);
 
 function getPotID() {
   $.ajax({
-      type: "GET",
+      type: "POST",
       url: "",
       datatype: "script",
       success: function(data) {
-        console.log("FACK YES");
+        console.log("FACK YES POT ID IS: " + data.potID);
         potID = data.potID;
       }
     });
@@ -82,7 +70,8 @@ function updateUserBalance(balance) {
   $('.user-balance').html("Ξ " + balance);
 }
 
-function updatePot(pot, time) {
+function updatePot(pot, ID) {
+  $('#jackpot-id').html(ID)
   $('#potSize').html("Ξ " + Number(pot).toFixed(8))
   updateDonutChart('#jackpot-doughnut', pot * 100 , true); 
 }
@@ -116,29 +105,17 @@ function updateDonutChart (el, percent, donut) {
     $(el + ' .left-side').css('transform', 'rotate(' + deg + 'deg)');
 }
 
-//Ignore the rest, it's for the input and checkbox
-
-$('#percent').change(function () {
-    var percent = $(this).val();
-    var donut = $('#donut input').is(':checked');
-    updateDonutChart('#specificChart', percent, donut);
-}).keyup(function () {
-    var percent = $(this).val();
-    var donut = $('#donut input').is(':checked');
-    updateDonutChart('#specificChart', percent, donut);
-});;
-
-$('#donut input').change(function () {
-    var donut = $('#donut input').is(':checked');
-    var percent = $("#percent").val();
-    if (donut) {
-        $('#donut span').html('Donut');
-    } else {
-        $('#donut span').html('Pie');
-    }
-    updateDonutChart('#specificChart', percent, donut);
-});
-
-
-
-
+          /* OLD CODE
+          console.log("pot: " + data.pot + " ether");
+          var i = 0;
+          if (data.winner) {
+            console.log("Winner is " + data.winner.name)
+            console.log("Players:")
+            $(jQuery.parseJSON(data.players)).each(function() {  
+                console.log(this.name)
+            });
+          }
+          updatePot(data.pot, potID);
+          updateUserBalance(data.user_balance);
+          timeLeft = data.time;
+        */

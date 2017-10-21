@@ -1,1 +1,1 @@
-$(".live-jackpot").html('<%= j render "pages/jackpot", @jackpot => Jackpot.last %>');
+ $(".live-jackpot").html("<%= escape_javascript(render partial: 'jackpot', locals: { items: @jackpot } ) %>"); 
