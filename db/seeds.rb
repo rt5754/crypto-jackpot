@@ -8,5 +8,5 @@
 #user = CreateAdminService.new.call
 #puts 'CREATED ADMIN USER: ' << user.email
 
-pot = Jackpot.create(open: true, pot: 0.0231)
+pot = Jackpot.create(open: true)
 pot.save

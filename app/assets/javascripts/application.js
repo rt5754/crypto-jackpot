@@ -35,44 +35,79 @@ $(document).ready(function() {
       $('#timeLeft').html("Drawing winner...")    
     }
   } */
-  var potID = 0
+  function params(active, delay, auto, spins) {
+    this.active = active
+  }
+  
+ 
+  
+  var potID 
+  var previousPotSize = 0
+  var potSize
   
   getPotID()
+  setInterval(getPotInfo(),1000);
+  setInterval(update, 1000);
   
-  setInterval(function() {
+
+function update() {
     getPotID()
     $.ajax({
         type: "POST",
         url: "/jackpot/update/" + potID,
         complete: function(response) {
           $('.live-jackpot').html(response.responseText);
+          getPotInfo()
         },
         error: function(xhr, status,error) {
           console.log("Error");
         }
     });
-}, 3000);
+}
 
 function getPotID() {
   $.ajax({
-      type: "POST",
-      url: "",
-      datatype: "script",
+      type: "GET",
+      url: "/",
+      datatype: "json",
       success: function(data) {
-        console.log("FACK YES POT ID IS: " + data.potID);
         potID = data.potID;
       }
     });
 }
+
+function getPotInfo() {
+  $.ajax({
+      type: "GET",
+      url: "/potinfo",
+      datatype: "json",
+      success: function(data) {
+        potSize = data.potSize
+        console.log(potSize + " " + previousPotSize)
+        updatePot(potSize, data.time)  
+        previousPotSize = potSize
+        updateUserBalance(data.user_balance)
+      },
+      error: function() {
+        console.log("Error getting pot info")
+      }
+    });  
+}
+
 });
+
 
 function updateUserBalance(balance) {
   $('.user-balance').html("Ξ " + balance);
 }
 
-function updatePot(pot, ID) {
-  $('#jackpot-id').html(ID)
-  $('#potSize').html("Ξ " + Number(pot).toFixed(8))
+function updatePot(pot,time) {
+  $('#pot-size').html("Ξ " + pot)
+  if (time < 300) {
+    $('#time-left').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether")
+  } else {
+    $('#time-left').html("Countdown will start when at least 2 players have entered the pot")    
+  }
   updateDonutChart('#jackpot-doughnut', pot * 100 , true); 
 }
 
@@ -104,18 +139,3 @@ function updateDonutChart (el, percent, donut) {
     $(el + ' .num').text(percent);
     $(el + ' .left-side').css('transform', 'rotate(' + deg + 'deg)');
 }
-
-          /* OLD CODE
-          console.log("pot: " + data.pot + " ether");
-          var i = 0;
-          if (data.winner) {
-            console.log("Winner is " + data.winner.name)
-            console.log("Players:")
-            $(jQuery.parseJSON(data.players)).each(function() {  
-                console.log(this.name)
-            });
-          }
-          updatePot(data.pot, potID);
-          updateUserBalance(data.user_balance);
-          timeLeft = data.time;
-        */

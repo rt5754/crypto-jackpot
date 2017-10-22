@@ -1,12 +1,9 @@
-<div class="live-jackpot">
-  <div class="center" style="padding:100px">
-    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+<div class="current-content">
+  <h1 align="center">Current Jackpot</h1>
+  <%= render 'jackpots/progress' %>
+  <div class="live-jackpot">
+    <div class="center" style="padding:100px">
+      <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+    </div>
   </div>
 </div>
-<% if User.current_user && (@jackpot.users.include? User.current_user == false) %>
-  <div class="center">
-    <%= link_to "Place Bet (0.1 ether)", update_pot_path(@jackpot, :amount => 0.1, :user_id => current_user.id), 
-    method: :post,:remote => true, id: "bet-btn", class: "btn btn-info btn-lg" %>
-  </div>
-<% end %>
-

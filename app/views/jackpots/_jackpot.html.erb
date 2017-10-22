@@ -1,34 +1,39 @@
 <div class="center">
   <%= render 'shared/messages' %>
   <h1>Jackpot #<%= @jackpot.id %>
-    <% if @jackpot.open == true %>
-      <span class="label label-success">Open</span>
-    <% else %>
+    <% if @jackpot.open == false %>
       <span class="label label-danger">Closed</span>
+    <% else %>
+      <span class="label label-success">Open</span>
     <% end %>
   </h1>
   
-  <div id="jackpot-doughnut" class="donut-size">
-  <div class="pie-wrapper">
-    <span class="label">
-        <span class="ether-logo"><img src="images/ether.png"></span>
-    </span>
-    <div class="pie">
-      <div class="left-side half-circle"></div>
-      <div class="right-side half-circle"></div>
+<% if User.current_user %>
+
+  <% if @jackpot.users.include? User.current_user %>
+    <div class="row well well-sm success">
+      <div class="col-md-6 right">
+        <h3>My bet</h3>  
+        <% @game = Game.where(jackpot_id: @jackpot.id, user_id: User.current_user.id).first %>
+        <%= @game.user_stake %>
+      </div>
+      <div class="col-md-6 left">
+        <h3>
+          Win %
+        </h3> 
+      </div>
     </div>
-    <div class="shadow"></div>
+  
+  <% else %>
+  <div class="center">
+    <%= link_to "Place Bet (0.1 ether)", update_pot_path(@jackpot, :amount => 0.1), 
+    method: :post,:remote => true, id: "bet-btn", class: "btn btn-info btn-lg" %>
   </div>
-  <div>
-    <h2>Ξ<%= @jackpot.pot %></h2>
-  </div>
-  <div>
-    <h5><%=  %></h5>
-  </div>
-</div>
+  <% end %>
+<% end %>
 
 <% if @jackpot.users.any? %>
-  <div class="table-responsive">
+  <div class="table-responsive" style="margin-top: 50px">
     <table class="table table-bordered">
       <thead>
         <th>User</th>
@@ -49,4 +54,17 @@
   </div>
 <% end %>
 
+
+</div>
+
+<div class="center" id="previous-jackpots">
+  <h2>Previous Jackpots</h2>
+  <div>
+    <% @pots = Jackpot.all %>
+    <% @pots.reverse.drop(1).each do |pot| %>
+      <% @prev_winner = User.find(pot.winner_id) if pot.winner_id %>
+      <h3><%= link_to "Pot " + pot.id.to_s + ":", show_jackpot_path(pot.id) %> 
+      <%= pot.pot %> ether was won by <%= link_to @prev_winner.name, user_path(@prev_winner) %></h3>
+    <% end %>
+  </div>
 </div>

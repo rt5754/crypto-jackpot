@@ -10,10 +10,20 @@ class JackpotsController < ApplicationController
     @jackpot = Jackpot.new
   end
   
-  def newPotInfo
+  def show
+    @jackpot = Jackpot.find(params[:id])
+  end
+  
+  def pot_info
     @jackpot = Jackpot.last
     respond_to do |format|
-      format.json { render json: { potID: @jackpot.id} }
+      if User.current_user
+        format.json { render json: { potID: @jackpot.id, potSize: @jackpot.pot, 
+        time: time_left, user_balance: User.current_user.balance, pot_open: @jackpot.open} }
+      else
+        format.json { render json: { potID: @jackpot.id, potSize: @jackpot.pot, 
+        time: time_left, pot_open: @jackpot.open} }
+      end
     end
   end
   
@@ -25,39 +35,36 @@ class JackpotsController < ApplicationController
   def update
     @jackpot = Jackpot.find(params[:id])
     @user = User.find(User.current_user.id) if User.current_user
+    
     if params.has_key?(:amount)
       if @jackpot.users.include? @user 
         flash[:danger] = "You have already gone in on this pot"
-      elsif @jackpot.open = false
+      elsif @jackpot.open == false
         flash[:danger] = "This pot has closed"
       else
         if @user 
           @jackpot.users.push(@user)
-          @jackpot.update(pot: @jackpot.pot + BigDecimal(params[:amount]))
+          @jackpot.update_attributes(pot: @jackpot.pot + BigDecimal(params[:amount]), open: true, winner_id: @jackpot.winner_id)
           User.current_user.update(balance: User.current_user.balance - BigDecimal(params[:amount]))
           @game = Game.where(user_id: @user.id, jackpot_id: @jackpot.id)
           @game.update(user_stake: BigDecimal(params[:amount]))
         end
       end
     end
-    if @user
-      balance = @user.balance.to_s
-    else
-      balance = "0.000"
-    end
     
-    if (time_left < 0) && (@jackpot.open)
+    if (time_left < 0)
+      draw_winner
       @jackpot.open = false
+      @jackpot.winner_id = @winner.id
       @jackpot.save
-      @tickets = []
-      @users = @jackpot.users
-      winner = draw_winner
       create
       respond_to do |format| 
+        format.json { render json: { winner: @winner.name } }
         format.html { render :partial => "jackpots/jackpot" }
       end
     else
       respond_to do |format| 
+        format.json { render json: { winner: "no winner yet" } }
         format.html { render :partial => "jackpots/jackpot" }
       end
     end
@@ -69,15 +76,24 @@ class JackpotsController < ApplicationController
   end
   
   def draw_winner
+    @user_tickets = 0
     @tickets = []
     @users = @jackpot.users
+    @users.each do |user|
+      @game = Game.where(jackpot_id: @jackpot.id, user_id: user.id).first
+      @user_tickets = @game.user_stake * 100000
+      for i in 1..@user_tickets do 
+        @tickets.push(user)  
+      end
+    end
     prng = Random.new
-    rand = prng.rand(0..(@users.count - 1))
-    return @users[rand]
+    rand = prng.rand(0..@tickets.length)
+    @winner = @tickets[rand]
+    return @winner
   end
   
   def time_left
-    @jackpot = Jackpot.find(params[:id])
+    @jackpot = Jackpot.last
     @game = Game.where(jackpot_id: @jackpot.id).first
     @game2 = Game.where(jackpot_id: @jackpot.id).second
     if @game && @game2

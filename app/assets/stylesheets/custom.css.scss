@@ -1,8 +1,39 @@
 @import 'bootstrap';
 @import 'bootstrap-sprockets';
 
+.current-content {
+  background-color: white;
+  padding: 30px;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+
+#previous-jackpots {
+  margin-top: 50px;
+  border-top: 3px solid #eaeaea;
+}
+
+body {
+  background-image: url(background.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.app-content {
+    min-height: 600px;
+}
+
 .center {
   text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
 }
 
 .btn-balance {
@@ -17,6 +48,16 @@ th {
   background-color: #3c3d41;
   color: white !important;
 }
+
+.navbar li {
+      color: white !important;
+  }
+
+.navbar-brand {
+    color: white !important;
+}
+
+
 
 #myFooter {
     background-color: #3c3d41;
@@ -44,6 +85,7 @@ th {
 #myFooter .footer-copyright p {
     margin: 10px;
     color: #ccc;
+    text-align: center;
 }
 
 #myFooter ul {
@@ -117,35 +159,8 @@ th {
     line-height: 25px;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1050px) {
     #myFooter {
         text-align: center;
     }
-}
-
-
-/* CSS used for positioning the footers at the bottom of the page. */
-/* You can remove this. */
-
-html{
-    height: 100%;
-}
-
-body{
-    display: flex;
-    display: -webkit-flex;
-    flex-direction: column;
-    -webkit-flex-direction: column;
-    height: 100%;
-}
-
-.content{
-   flex: 1 0 auto;
-   -webkit-flex: 1 0 auto;
-   min-height: 200px;
-}
-
-#myFooter{
-   flex: 0 0 auto;
-   -webkit-flex: 0 0 auto;
 }
