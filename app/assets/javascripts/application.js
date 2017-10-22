@@ -17,7 +17,7 @@
 //= require_tree .
 
 
-/* global $, pot, jQuery */
+/* global $, pot */
 
 $(document).ready(function() {
   
@@ -35,29 +35,26 @@ $(document).ready(function() {
       $('#timeLeft').html("Drawing winner...")    
     }
   } */
-  function params(active, delay, auto, spins) {
-    this.active = active
-  }
   
  
   
-  var potID 
-  var previousPotSize = 0
-  var potSize
+  var potID ;
+  var previousPotSize = 0;
+  var potSize;
   
-  getPotID()
+  getPotID();
   setInterval(getPotInfo(),1000);
   setInterval(update, 1000);
   
 
 function update() {
-    getPotID()
+    getPotID();
     $.ajax({
         type: "POST",
         url: "/jackpot/update/" + potID,
         complete: function(response) {
           $('.live-jackpot').html(response.responseText);
-          getPotInfo()
+          getPotInfo();
         },
         error: function(xhr, status,error) {
           console.log("Error");
@@ -82,14 +79,14 @@ function getPotInfo() {
       url: "/potinfo",
       datatype: "json",
       success: function(data) {
-        potSize = data.potSize
-        console.log(potSize + " " + previousPotSize)
-        updatePot(potSize, data.time)  
-        previousPotSize = potSize
-        updateUserBalance(data.user_balance)
+        potSize = data.potSize;
+        console.log(potSize + " " + previousPotSize);
+        updatePot(potSize, data.time)  ;
+        previousPotSize = potSize;
+        updateUserBalance(data.user_balance);
       },
       error: function() {
-        console.log("Error getting pot info")
+        console.log("Error getting pot info");
       }
     });  
 }
@@ -102,11 +99,11 @@ function updateUserBalance(balance) {
 }
 
 function updatePot(pot,time) {
-  $('#pot-size').html("Ξ " + pot)
+  $('#pot-size').html("Ξ " + pot);
   if (time < 300) {
-    $('#time-left').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether")
+    $('#time-left').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether");
   } else {
-    $('#time-left').html("Countdown will start when at least 2 players have entered the pot")    
+    $('#time-left').html("Countdown will start when at least 2 players have entered the pot");    
   }
   updateDonutChart('#jackpot-doughnut', pot * 100 , true); 
 }
