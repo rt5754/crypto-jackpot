@@ -64,7 +64,9 @@
     <% @pots.reverse.drop(1).each do |pot| %>
       <% @prev_winner = User.find(pot.winner_id) if pot.winner_id %>
       <h3><%= link_to "Pot " + pot.id.to_s + ":", show_jackpot_path(pot.id) %> 
-      <%= pot.pot %> ether was won by <%= link_to @prev_winner.name, user_path(@prev_winner) %> with a </h3>
+      <% if pot.winner_id %>
+        <%= pot.pot %> ether was won by <%= link_to @prev_winner.name, user_path(@prev_winner) %> with a </h3>
+      <% end %>
     <% end %>
   </div>
 </div>
