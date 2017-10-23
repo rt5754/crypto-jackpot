@@ -32,7 +32,7 @@
   <% end %>
 <% end %>
 
-<% if @jackpot.users %>
+<% if @jackpot.users.any? %>
   <div class="table-responsive" style="margin-top: 50px">
     <table class="table table-bordered">
       <thead>
@@ -63,10 +63,14 @@
     <% @pots = Jackpot.all %>
     <% @pots.reverse.drop(1).each do |pot| %>
       <% @prev_winner = User.find(pot.winner_id) if pot.winner_id %>
+      <% if pot.winner_id %>
+      <% @winner_game = Game.where(jackpot_id: pot.id, user_id: @prev_winner.id).first %>
       <h3><%= link_to "Pot " + pot.id.to_s + ":", show_jackpot_path(pot.id) %> 
       <% if pot.winner_id %>
-        <%= pot.pot %> ether was won by <%= link_to @prev_winner.name, user_path(@prev_winner) %> with a </h3>
+        <%= pot.pot %> ether was won by <%= link_to @prev_winner.name, user_path(@prev_winner) %> with a
+        <%= ((@winner_game.user_stake / pot.pot) * 100).round(2) %>% chance</h3>
       <% end %>
+    <% end %>
     <% end %>
   </div>
 </div>
