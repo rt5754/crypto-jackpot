@@ -39,19 +39,19 @@ $(document).ready(function() {
   
   setInterval(updateTimer(time), 1000)
 
+/*
 function update() {
     $.ajax({
         type: "POST",
         url: "/jackpot/update/" + potID,
         complete: function(response) {
           $('.live-jackpot').html(response.responseText);
-          getPotInfo();
         },
         error: function(xhr, status,error) {
           console.log("Error");
         }
     });
-}
+} */
 
 function getPotID(id) {
   alert(id)
@@ -69,24 +69,24 @@ function ge() {
     });
 }
 
-function getPotInfo() {
-  $.ajax({
-      type: "GET",
-      url: "/potinfo",
-      datatype: "json",
-      success: function(data) {
-        potSize = data.potSize;
-        console.log(potSize + " " + previousPotSize);
-        updatePot(potSize, data.time)  ;
-        previousPotSize = potSize;
-        updateUserBalance(data.user_balance);
-      },
-      error: function() {
-        console.log("Error getting pot info");
-      }
+    /* function getPotInfo() {
+    $.ajax({
+    type: "GET",
+    url: "/potinfo",
+    datatype: "json",
+    success: function(data) {
+      potSize = data.potSize;
+      console.log(potSize + " " + previousPotSize);
+      updatePot(potSize, data.time)  ;
+      previousPotSize = potSize;
+      updateUserBalance(data.user_balance);
+    },
+    error: function() {
+      console.log("Error getting pot info");
+    }
     });  
-}
-
+    }
+    */
 });
 
 
