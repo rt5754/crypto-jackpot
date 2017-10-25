@@ -21,12 +21,8 @@
 
 $(document).ready(function() {
   
-  $('#test-btn').click(function () {
-      updateDonutChart('#specificChart', pot, true);    
-  });
-  
-/*  function updateTimer(time) {
-    if (time != "300") {
+  function updateTimer(time) {
+    if (time != 300) {
       $('#timeLeft').html("Winner drawn in " + time + " seconds, or when pot reaches 1 ether") 
     } else {
       $('#timeLeft').html("Countdown will start when at least 2 players have entered the pot")  
@@ -34,18 +30,15 @@ $(document).ready(function() {
     if (time < 0) {
       $('#timeLeft').html("Drawing winner...")    
     }
-  } */
-  
- 
+  } 
   
   var potID ;
   var previousPotSize = 0;
   var potSize;
+  getPotInfo()
+  var time = 300
   
-  getPotID();
-  setInterval(getPotInfo(),1000);
-  setInterval(update, 1000);
-  
+  setInterval(updateTimer(time), 1000)
 
 function update() {
     getPotID();

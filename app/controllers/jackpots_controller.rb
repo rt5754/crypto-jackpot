@@ -58,15 +58,7 @@ class JackpotsController < ApplicationController
       @jackpot.winner_id = @winner.id
       @jackpot.save
       create
-      respond_to do |format| 
-        format.json { render json: { winner: @winner.name } }
-        format.html { render :partial => "jackpots/jackpot" }
-      end
     else
-      respond_to do |format| 
-        format.json { render json: { winner: "no winner yet" } }
-        format.html { render :partial => "jackpots/jackpot" }
-      end
     end
     
   end

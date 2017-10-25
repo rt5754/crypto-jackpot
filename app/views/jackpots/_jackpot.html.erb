@@ -1,23 +1,47 @@
 <div class="center">
   <%= render 'shared/messages' %>
   <h1>Jackpot #<%= @jackpot.id %>
-    <% if @jackpot.open == false %>
+      <% if @jackpot.open == false %>
       <span class="label label-danger">Closed</span>
     <% else %>
       <span class="label label-success">Open</span>
     <% end %>
   </h1>
+</div> 
+
+<div class="col-md-8 col-md-offset-2">
+  <div id="jackpot-doughnut" class="donut-size" style="margin-top: 20px">
+    <div class="pie-wrapper">
+      <span class="label">
+          <span class="ether-logo"><img src="images/ether.png"></span>
+      </span>
+      <div class="pie">
+        <div class="left-side half-circle"></div>
+        <div class="right-side half-circle"></div>
+      </div>
+      <div class="shadow"></div>
+    </div>
+    <div>
+      <h2 align="center" id="pot-size"><%= @jackpot.pot %></h2>
+    </div>
+    <div>
+      <h5 align="center" id="time-left"></h5>
+    </div>
+  </div>
+</div>
+
+<div class="center">
   
 <% if User.current_user %>
 
   <% if @jackpot.users.include? User.current_user %>
-    <div class="row well well-sm success">
-      <div class="col-md-6 right">
+    <div class="row well well-sm success" id="bet-info">
+      <div class="col-md-2 col-md-offset-4 center">
         <h3>My bet</h3>  
         <% @game = Game.where(jackpot_id: @jackpot.id, user_id: User.current_user.id).first %>
         <%= @game.user_stake %>
       </div>
-      <div class="col-md-6 left">
+      <div class="col-md-2 center">
         <h3>
           Win %
         </h3> 
@@ -25,22 +49,32 @@
     </div>
   
   <% else %>
-  <div class="center">
-    <%= link_to "Place Bet (0.1 ether)", update_pot_path(@jackpot, :amount => 0.1), 
-    method: :post,:remote => true, id: "bet-btn", class: "btn btn-info btn-lg" %>
-  </div>
+    <div id="bet-input">
+      <%= form_for [@jackpot, @game], remote: true, html: { role: 'Form' } do |f| %>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <div class="input-group">
+              <%= f.number_field :user_stake, class: 'form-control', step: :any %>
+              <span class="input-group-btn">
+                <%= f.submit 'Go', :html => { :type => "button" }, class: "btn btn-default" %>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
 
 <% if @jackpot.users.any? %>
-  <div class="table-responsive" style="margin-top: 50px">
+  <div class="table-responsive" style="margin-top: 50px" id="players-table">
     <table class="table table-bordered">
       <thead>
         <th>User</th>
         <th>Stake</th>
         <th>Win chance</th>
       </thead>
-      <tbody>
+      <tbody id="players-table-body">
         <% @jackpot.users.each do |user| %>
           <tr>
             <td><%= link_to user.name, user_path(user) %></td>
@@ -49,6 +83,20 @@
             <td><%= ((@game.user_stake / @jackpot.pot) * 100).round(2) %>%</td>
           </tr>
         <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+<% else %>
+<div class="table-responsive" style="margin-top: 50px; display: none" id="players-table">
+    <table class="table table-bordered">
+      <thead>
+        <th>User</th>
+        <th>Stake</th>
+        <th>Win chance</th>
+      </thead>
+      <tbody id="players-table-body">
+        
       </tbody>
     </table>
   </div>

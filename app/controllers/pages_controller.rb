@@ -4,11 +4,11 @@ class PagesController < ApplicationController
   
   def home
     @jackpot = Jackpot.last
+    @game = Game.new
     if current_user
       @user = current_user
     end
     respond_to do |format|
-      format.json { render json: { potID: @jackpot.id } }
       format.html { render 'home' }
     end
     

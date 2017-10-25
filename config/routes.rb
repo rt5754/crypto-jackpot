@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :admins
   devise_for :users
   root to: 'pages#home'
   get '/users/:id/addFunds', to: 'users#addFunds', as: 'addFunds'
@@ -9,4 +10,11 @@ Rails.application.routes.draw do
   post 'jackpot', to: 'jackpots#update', as: 'jackpot'
   get 'jackpot/:id', to: 'jackpots#show', as: 'show_jackpot'
   resources :users
+  resources :games
+  
+  resources :jackpots do
+    resources :games, shallow: true
+  end
+  
+  mount ActionCable.server, at: '/cable'
 end
