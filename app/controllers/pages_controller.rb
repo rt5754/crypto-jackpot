@@ -10,6 +10,7 @@ class PagesController < ApplicationController
     end
     respond_to do |format|
       format.html { render 'home' }
+      format.js { render 'home' } 
     end
     
   end

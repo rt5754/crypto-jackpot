@@ -35,13 +35,11 @@ $(document).ready(function() {
   var potID ;
   var previousPotSize = 0;
   var potSize;
-  getPotInfo()
   var time = 300
   
   setInterval(updateTimer(time), 1000)
 
 function update() {
-    getPotID();
     $.ajax({
         type: "POST",
         url: "/jackpot/update/" + potID,
@@ -55,13 +53,18 @@ function update() {
     });
 }
 
-function getPotID() {
+function getPotID(id) {
+  alert(id)
+}
+
+function ge() {
   $.ajax({
       type: "GET",
       url: "/",
       datatype: "json",
       success: function(data) {
         potID = data.potID;
+        alert(potID)
       }
     });
 }
