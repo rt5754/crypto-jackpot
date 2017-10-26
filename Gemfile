@@ -11,6 +11,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'railties'
 gem 'rabl-rails'
 gem 'redis'
+gem 'will_paginate'
 group :development, :test do
   gem 'byebug', platform: :mri
 end

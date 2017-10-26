@@ -15,6 +15,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @games = Game.where(user_id: @user.id).paginate(page: params[:page],:per_page => 10)
+    @games.reverse_order!
   end
   
   def addFunds

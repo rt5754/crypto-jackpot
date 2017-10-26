@@ -1,0 +1,12 @@
+<% obj.each do |game| %>
+  <p>
+    <% @jackpot = Jackpot.find(game.jackpot_id) %>
+    <% if @jackpot.winner_id == user.id && @jackpot.winner_id %>
+      Won <%= @jackpot.pot %> in
+    <% else %>
+      Bet <%= game.user_stake.to_s %> ether in 
+    <% end %>
+    
+    <%= link_to "Jackpot ##{game.jackpot_id}", show_jackpot_path(game.jackpot_id) %>
+  </p>
+<% end %>

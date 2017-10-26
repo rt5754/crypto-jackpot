@@ -164,3 +164,9 @@ th {
         text-align: center;
     }
 }
+
+@media screen and (max-width: 500px) {
+    #wallet-address {
+        font-size: 10px;
+    }
+}

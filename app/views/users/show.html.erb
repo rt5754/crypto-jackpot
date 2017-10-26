@@ -1,5 +1,19 @@
 <div class="current-content">
-  <h3><%= @user.name %></h3>
-  <p>Name: <%= @user.name if @user.name %></p>
-  <p>Email: <%= @user.email if @user.email %></p>
+  <div class="center">
+    <h1><%= @user.name %></h1>
+    <small id="wallet-address">
+      <%= link_to @user.wallet_address, "https://etherscan.io/address/#{@user.wallet_address}", target: :blank %>
+    </small>
+    <div>
+      <div class="well">
+        <h3>History</h3>  
+        <% if @games.any? %>
+          <%= render 'games/game', obj: @games, user: @user %>
+          <%= will_paginate @games %>
+        <% else %>
+          <p>User has no history ...yet</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
